@@ -157,8 +157,8 @@ export default function Footer() {
                 <div
                   key={pillar.id}
                   className={`rounded-xl border p-4 ${pillar.active
-                      ? "border-amber-400 bg-amber-400/10"
-                      : "border-white/10 bg-white/5"
+                    ? "border-amber-400 bg-amber-400/10"
+                    : "border-white/10 bg-white/5"
                     }`}
                 >
                   <div className="flex items-center justify-between">
@@ -206,7 +206,7 @@ export default function Footer() {
                   href="mailto:abhishekkumardipu@gmail.com"
                   className="text-gray-300 hover:text-amber-400"
                 >
-                  abhishekkumardipu@gmail.com
+                  stories@beforehernameexisted.com
                 </a>
               </div>
 
