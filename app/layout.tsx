@@ -9,21 +9,27 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
 });
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-cormorant",
+  display: "swap",
 });
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
+  display: "swap",
 });
 
+const siteUrl =
+  "https://before-her-name-existed-origin.vercel.app";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://your-domain.com"), // Replace with your actual domain
+  metadataBase: new URL(siteUrl),
 
   title: {
     default: "Before Her Name Existed",
@@ -31,9 +37,13 @@ export const metadata: Metadata = {
   },
 
   description:
-    "An exploration of identity, longing, and the unseen paths that exist before destiny introduces itself.",
+    "Before Her Name Existed is the first documentary pillar in the Soulfire Chronicles, exploring identity, longing, destiny, and the unseen paths that exist before life's defining connections.",
 
   applicationName: "Before Her Name Existed",
+
+  generator: "Next.js",
+
+  referrer: "origin-when-cross-origin",
 
   creator: "Soulfire Chronicles",
 
@@ -45,26 +55,40 @@ export const metadata: Metadata = {
     },
   ],
 
+  category: "Documentary",
+
+  classification: "Film & Documentary",
+
   keywords: [
     "Before Her Name Existed",
     "Soulfire Chronicles",
     "Documentary",
+    "Documentary Film",
     "Origin",
+    "Identity",
     "Love",
     "Destiny",
     "Human Connection",
-    "Identity",
+    "Psychology",
+    "Spirituality",
+    "Consciousness",
+    "Meaningful Coincidences",
     "Storytelling",
     "Cinema",
-    "Documentary Film",
+    "Human Experience",
+    "Long Form Documentary",
+    "Film",
+    "Origin Documentary",
   ],
 
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       "max-image-preview": "large",
       "max-snippet": -1,
       "max-video-preview": -1,
@@ -72,30 +96,32 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: "/",
+    canonical: siteUrl,
   },
 
   icons: {
-    icon: "app/favicon.ico",
-    shortcut: "app/favicon.ico",
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
 
   openGraph: {
     title: "Before Her Name Existed",
+
     description:
       "Who are we before the story begins? A cinematic documentary exploring identity, destiny, love, and human connection.",
 
-    url: "https://before-her-name-existed-origin.vercel.app/",
+    url: siteUrl,
 
-    siteName: "Before Her Name Existed Documentary",
+    siteName: "Soulfire Chronicles",
+
     locale: "en_US",
 
     type: "website",
 
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/opengraph-image.jpg",
         width: 1200,
         height: 630,
         alt: "Before Her Name Existed Documentary",
@@ -111,12 +137,26 @@ export const metadata: Metadata = {
     description:
       "A cinematic documentary exploring identity, destiny, love, and human connection.",
 
-    creator: "@yourusername",
+    images: ["/twitter-image.jpg"],
 
-    images: ["/og-image.jpg"],
+    creator: "@SoulfireChronicles",
   },
 
-  category: "Documentary",
+  appleWebApp: {
+    capable: true,
+    title: "Before Her Name Existed",
+    statusBarStyle: "black-translucent",
+  },
+
+  formatDetection: {
+    telephone: false,
+    address: false,
+    email: false,
+  },
+
+  verification: {
+    google: "YOUR_GOOGLE_SITE_VERIFICATION_CODE",
+  },
 };
 
 export default function RootLayout({
@@ -134,6 +174,8 @@ export default function RootLayout({
           bg-black
           text-white
           antialiased
+          selection:bg-amber-400
+          selection:text-black
         `}
       >
         {children}
