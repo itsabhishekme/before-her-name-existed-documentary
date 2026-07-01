@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import SectionTitle from "./SectionTitle";
+import { useState } from "react";
 
 type FormData = {
   fullName: string;
@@ -26,10 +27,34 @@ export default function Questionnaire() {
     reset,
   } = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    alert("Thank you for sharing your story with Soulfire Chronicles.");
-    reset();
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = async (data: FormData) => {
+    try {
+      setLoading(true);
+
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert("Thank you! Your story has been submitted successfully.");
+        reset();
+      } else {
+        alert(result.message || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Unable to submit your story. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -253,12 +278,20 @@ export default function Questionnaire() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full rounded-full bg-amber-400 py-4 text-lg font-semibold text-black transition hover:bg-amber-300"
+            disabled={loading}
+            className={`w-full rounded-full py-4 text-lg font-semibold transition ${loading
+                ? "cursor-not-allowed bg-gray-600 text-white"
+                : "bg-amber-400 text-black hover:bg-amber-300"
+              }`}
           >
-            Submit My Story
+            {loading ? "Submitting..." : "Submit My Story"}
           </button>
         </motion.form>
       </div>
     </section>
   );
+}
+
+function setLoading(arg0: boolean) {
+  throw new Error("Function not implemented.");
 }
