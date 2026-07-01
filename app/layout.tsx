@@ -1,5 +1,9 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond, Playfair_Display } from "next/font/google";
+import {
+  Inter,
+  Cormorant_Garamond,
+  Playfair_Display,
+} from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -19,31 +23,101 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Before Her Name Existed",
+  metadataBase: new URL("https://your-domain.com"), // Replace with your actual domain
+
+  title: {
+    default: "Before Her Name Existed",
+    template: "%s | Soulfire Chronicles",
+  },
+
   description:
-    "A cinematic documentary exploring identity, destiny, love, and the unseen paths that exist before two lives intersect.",
-  keywords: [
-    "Documentary",
-    "Origin",
-    "Soulfire Chronicles",
-    "Love",
-    "Destiny",
-    "Human Connection",
-    "Storytelling",
-  ],
+    "An exploration of identity, longing, and the unseen paths that exist before destiny introduces itself.",
+
+  applicationName: "Before Her Name Existed",
+
+  creator: "Soulfire Chronicles",
+
+  publisher: "Soulfire Chronicles",
+
   authors: [
     {
       name: "Soulfire Chronicles",
     },
   ],
-  creator: "Soulfire Chronicles",
-  applicationName: "Before Her Name Existed",
+
+  keywords: [
+    "Before Her Name Existed",
+    "Soulfire Chronicles",
+    "Documentary",
+    "Origin",
+    "Love",
+    "Destiny",
+    "Human Connection",
+    "Identity",
+    "Storytelling",
+    "Cinema",
+    "Documentary Film",
+  ],
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+
+  alternates: {
+    canonical: "/",
+  },
+
+  icons: {
+    icon: "app/favicon.ico",
+    shortcut: "app/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+
   openGraph: {
     title: "Before Her Name Existed",
     description:
-      "Who are we before the story begins? A cinematic documentary exploring love, destiny, and human connection.",
+      "Who are we before the story begins? A cinematic documentary exploring identity, destiny, love, and human connection.",
+
+    url: "https://your-domain.com",
+
+    siteName: "Soulfire Chronicles",
+
+    locale: "en_US",
+
     type: "website",
+
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Before Her Name Existed Documentary",
+      },
+    ],
   },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title: "Before Her Name Existed",
+
+    description:
+      "A cinematic documentary exploring identity, destiny, love, and human connection.",
+
+    creator: "@yourusername",
+
+    images: ["/og-image.jpg"],
+  },
+
+  category: "Documentary",
 };
 
 export default function RootLayout({
@@ -52,7 +126,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`
           ${inter.variable}
