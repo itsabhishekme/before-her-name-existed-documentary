@@ -23,22 +23,26 @@ export default function Footer() {
     {
       id: "02",
       title: "Memory",
-      subtitle: "Echoes We Carry",
+      subtitle: "The Human Archive",
+      active: false,
     },
     {
       id: "03",
       title: "Healing",
-      subtitle: "Where Broken Things Bloom",
+      subtitle: "The Letters Never Sent",
+      active: false,
     },
     {
       id: "04",
       title: "Destiny",
-      subtitle: "The Paths That Find Us",
+      subtitle: "Echoes of Destiny",
+      active: false,
     },
     {
       id: "05",
       title: "Transformation",
-      subtitle: "Becoming",
+      subtitle: "The Alchemy of Becoming",
+      active: false,
     },
   ];
 
@@ -152,11 +156,10 @@ export default function Footer() {
               {pillars.map((pillar) => (
                 <div
                   key={pillar.id}
-                  className={`rounded-xl border p-4 ${
-                    pillar.active
+                  className={`rounded-xl border p-4 ${pillar.active
                       ? "border-amber-400 bg-amber-400/10"
                       : "border-white/10 bg-white/5"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-amber-400">
