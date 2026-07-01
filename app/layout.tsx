@@ -86,10 +86,9 @@ export const metadata: Metadata = {
     description:
       "Who are we before the story begins? A cinematic documentary exploring identity, destiny, love, and human connection.",
 
-    url: "https://your-domain.com",
+    url: "https://before-her-name-existed-origin.vercel.app/",
 
-    siteName: "Soulfire Chronicles",
-
+    siteName: "Before Her Name Existed Documentary",
     locale: "en_US",
 
     type: "website",
