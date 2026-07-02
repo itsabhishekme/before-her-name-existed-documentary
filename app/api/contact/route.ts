@@ -1,7 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const escapeHtml = (text: string = "") =>
+const escapeHtml = (text: unknown = "") =>
   String(text)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -33,74 +33,71 @@ const questions = [
   'If your story became part of "Before Her Name Existed," what message would you want audiences around the world to remember?',
 ];
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // Validate required fields
-    if (!body.fullName || !body.email) {
+    if (!body.fullName?.trim()) {
       return NextResponse.json(
-        {
-          success: false,
-          message: "Name and email are required.",
-        },
+        { success: false, message: "Full name is required." },
         { status: 400 }
       );
     }
 
-    // Validate environment variables
-    if (
-      !process.env.EMAIL_USER ||
-      !process.env.EMAIL_PASS ||
-      !process.env.EMAIL_TO
-    ) {
-      console.error("Missing email environment variables.");
+    if (!body.email?.trim()) {
+      return NextResponse.json(
+        { success: false, message: "Email is required." },
+        { status: 400 }
+      );
+    }
+
+    const EMAIL_USER = process.env.EMAIL_USER;
+    const EMAIL_PASS = process.env.EMAIL_PASS;
+    const EMAIL_TO = process.env.EMAIL_TO;
+
+    if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
+      console.error("Missing EMAIL_USER / EMAIL_PASS / EMAIL_TO");
 
       return NextResponse.json(
         {
           success: false,
-          message: "Email server is not configured.",
+          message: "Server email configuration missing.",
         },
         { status: 500 }
       );
     }
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
       },
     });
-
-    // Verify SMTP connection
-    await transporter.verify();
 
     const responses = questions
       .map((question, index) => {
         const answer = body[`q${index + 1}`] || "Not answered";
 
         return `
-          <div style="margin-bottom:24px;padding:16px;border:1px solid #ddd;border-radius:8px;">
-            <h4 style="margin:0 0 10px;color:#b45309;">
+          <div style="margin-bottom:20px;padding:15px;border:1px solid #ddd;border-radius:8px;">
+            <h3 style="margin:0;color:#b45309;">
               Question ${index + 1}
-            </h4>
+            </h3>
 
-            <p style="font-weight:bold;margin-bottom:8px;">
-              ${escapeHtml(question)}
-            </p>
+            <p><strong>${escapeHtml(question)}</strong></p>
 
-            <p style="margin:0;">
-              ${escapeHtml(answer)}
-            </p>
+            <p>${escapeHtml(answer)}</p>
           </div>
         `;
       })
       .join("");
 
     await transporter.sendMail({
-      from: `"Before Her Name Existed" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_TO,
+      from: `"Before Her Name Existed" <${EMAIL_USER}>`,
+      to: EMAIL_TO,
       replyTo: body.email,
       subject: `New Documentary Story - ${body.fullName}`,
       html: `
@@ -109,47 +106,46 @@ export async function POST(req: Request) {
             Before Her Name Existed
           </h1>
 
-          <p>A new participant has submitted a story.</p>
+          <p>A new documentary submission has been received.</p>
 
           <hr>
 
-          <h2>Participant Information</h2>
-
-          <table cellpadding="8" cellspacing="0" style="border-collapse:collapse;width:100%;">
+          <table style="width:100%;border-collapse:collapse;">
             <tr>
               <td><strong>Name</strong></td>
               <td>${escapeHtml(body.fullName)}</td>
             </tr>
+
             <tr>
               <td><strong>Email</strong></td>
               <td>${escapeHtml(body.email)}</td>
             </tr>
+
             <tr>
               <td><strong>Age</strong></td>
               <td>${escapeHtml(body.age)}</td>
             </tr>
+
             <tr>
               <td><strong>Country</strong></td>
               <td>${escapeHtml(body.country)}</td>
             </tr>
           </table>
 
-          <br>
           <hr>
 
-          <h2>Questionnaire Responses</h2>
+          <h2>Responses</h2>
 
           ${responses}
 
           <hr>
 
-          <h3>Consent</h3>
-
           <p>
+            <strong>Consent:</strong>
             ${
               body.consent
-                ? "✅ Participant has provided consent."
-                : "❌ Participant did not provide consent."
+                ? "✅ Participant consented."
+                : "❌ No consent."
             }
           </p>
         </div>
@@ -161,13 +157,18 @@ export async function POST(req: Request) {
       message: "Story submitted successfully.",
     });
   } catch (error: any) {
-    console.error("========== EMAIL ERROR ==========");
+    console.error("POST /api/contact");
     console.error(error);
 
     return NextResponse.json(
       {
         success: false,
-        message: error?.message || "Failed to send email.",
+        error: error?.code,
+        message: error?.message,
+        stack:
+          process.env.NODE_ENV === "development"
+            ? error?.stack
+            : undefined,
       },
       { status: 500 }
     );
