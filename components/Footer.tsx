@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { Heart, ArrowUp, Mail, Globe, Film, Sparkles } from "lucide-react";
+import { FaYoutube } from "react-icons/fa";
+import { SiNetflix } from "react-icons/si";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -133,6 +135,15 @@ export default function Footer() {
 
               <li>
                 <Link
+                  href="#release"
+                  className="text-gray-400 transition hover:text-amber-400"
+                >
+                  Release Platforms
+                </Link>
+              </li>
+
+              <li>
+                <Link
                   href="/"
                   className="text-gray-400 transition hover:text-amber-400"
                 >
@@ -140,6 +151,35 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+
+            {/* Release Platforms */}
+            <div className="mt-12">
+              <h3 className="text-2xl font-semibold text-white">
+                Release Platforms
+              </h3>
+
+              <div className="mt-8 flex items-center gap-6">
+                <a
+                  href="https://www.youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 transition hover:text-red-600"
+                  aria-label="YouTube"
+                >
+                  <FaYoutube className="h-10 w-10" />
+                </a>
+
+                <a
+                  href="https://www.netflix.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 transition hover:text-red-500"
+                  aria-label="Netflix"
+                >
+                  <SiNetflix className="h-10 w-10" />
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Journey */}
@@ -270,6 +310,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
     </footer>
   );
 }
