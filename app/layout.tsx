@@ -26,7 +26,7 @@ const playfair = Playfair_Display({
 });
 
 const siteUrl =
-  "https://before-her-name-existed-origin.vercel.app";
+  "https://beforehernamefilm.vercel.app/";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
