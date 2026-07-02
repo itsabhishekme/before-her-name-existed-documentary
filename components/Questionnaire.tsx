@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { motion } from "framer-motion";
 import SectionTitle from "./SectionTitle";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 type FormData = {
   fullName: string;
@@ -44,10 +45,11 @@ export default function Questionnaire() {
 
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (data: FormData) => {
-    try {
-      setLoading(true);
 
+  const onSubmit = async (data: FormData) => {
+    setLoading(true);
+
+    try {
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -59,14 +61,60 @@ export default function Questionnaire() {
       const result = await response.json();
 
       if (result.success) {
-        alert("Thank you! Your story has been submitted successfully.");
+        await Swal.fire({
+          icon: "success",
+          title: "🎉 Story Submitted!",
+          html: `
+          <div style="font-size:16px;line-height:1.8">
+            <p>Thank you for sharing your story.</p>
+            <p>Your submission has been received successfully.</p>
+            <p style="color:#6b7280;font-size:14px;">
+              We truly appreciate your contribution ❤️
+            </p>
+          </div>
+        `,
+          confirmButtonText: "Awesome!",
+          confirmButtonColor: "#f59e0b",
+          background: "#111827",
+          color: "#ffffff",
+          width: 520,
+          showClass: {
+            popup: "animate__animated animate__zoomIn",
+          },
+          hideClass: {
+            popup: "animate__animated animate__zoomOut",
+          },
+        });
+
         reset();
-      } else {
-        alert(result.message || "Something went wrong.");
+        return;
       }
+
+      Swal.fire({
+        icon: "error",
+        title: "Submission Failed",
+        text: result.message || "Something went wrong.",
+        confirmButtonColor: "#ef4444",
+        background: "#111827",
+        color: "#ffffff",
+      });
     } catch (error) {
       console.error(error);
-      alert("Unable to submit your story. Please try again.");
+
+      Swal.fire({
+        icon: "warning",
+        title: "Network Error",
+        html: `
+        <div style="font-size:15px">
+          Unable to submit your story.<br/>
+          Please check your internet connection and try again.
+        </div>
+      `,
+        confirmButtonText: "Try Again",
+        confirmButtonColor: "#f59e0b",
+        background: "#111827",
+        color: "#ffffff",
+      });
     } finally {
       setLoading(false);
     }
@@ -434,14 +482,14 @@ export default function Questionnaire() {
               </span>
             </label>
           </div>
-          
+
           {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
             className={`w-full rounded-full py-4 text-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${loading
-                ? "cursor-not-allowed bg-gray-500 text-white opacity-80"
-                : "bg-amber-400 text-black hover:bg-amber-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
+              ? "cursor-not-allowed bg-gray-500 text-white opacity-80"
+              : "bg-amber-400 text-black hover:bg-amber-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
               }`}
           >
             {loading ? (
