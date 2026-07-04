@@ -4,6 +4,8 @@ import {
   Cormorant_Garamond,
   Playfair_Display,
 } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -416,6 +418,11 @@ export default function RootLayout({
       >
         {children}
       </body>
+       {/* Vercel Analytics */}
+      <Analytics />
+
+      {/* Google Analytics */}
+      <GoogleAnalytics gaId={""}/>
     </html>
   );
 }
