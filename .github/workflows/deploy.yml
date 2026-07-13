@@ -1,19 +1,16 @@
-name: Next.js CI/CD
+name: Next.js CI
 
 on:
-
   push:
-
     branches:
       - main
+      - develop
 
   pull_request:
-
     branches:
       - main
 
 jobs:
-
   build:
 
     runs-on: ubuntu-latest
@@ -25,28 +22,15 @@ jobs:
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
-
         with:
           node-version: 22
+          cache: npm
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Lint
         run: npm run lint
 
-      - name: Build Project
+      - name: Build Application
         run: npm run build
-
-  docker:
-
-    needs: build
-
-    runs-on: ubuntu-latest
-
-    steps:
-
-      - uses: actions/checkout@v4
-
-      - name: Build Docker Image
-        run: docker build -t before-her-name-existed .
