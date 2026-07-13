@@ -6,35 +6,43 @@ on:
       - main
 
 jobs:
-
   deploy:
-
+    name: Deploy Application
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/checkout@v4
-
-      - name: Deploy
-
+      - name: Deploy to AWS EC2
         uses: appleboy/ssh-action@v1.2.0
-
         with:
-
           host: ${{ secrets.EC2_HOST }}
-
           username: ubuntu
-
           key: ${{ secrets.EC2_SSH_KEY }}
-
+          port: 22
           script: |
+            set -e
 
-            cd /home/ubuntu/before-her-name-existed-documentary
+            PROJECT_DIR=/home/ubuntu/before-her-name-existed-documentary
 
-            git pull origin main
+            if [ ! -d "$PROJECT_DIR" ]; then
+              git clone https://github.com/itsabhishekme/before-her-name-existed-documentary.git $PROJECT_DIR
+            fi
 
-            npm install
+            cd $PROJECT_DIR
+
+            git fetch origin
+            git reset --hard origin/main
+
+            npm ci
 
             npm run build
 
-            pm2 restart documentary
+            if pm2 describe documentary > /dev/null; then
+              pm2 restart documentary
+            else
+              pm2 start npm --name documentary -- start
+            fi
+
+            pm2 save
